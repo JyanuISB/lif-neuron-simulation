@@ -1,415 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Rose Day Andy Bhai</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --cream: #faf8f5;
-            --dusty-pink: #d4a5a5;
-            --rose: #c17b7b;
-            --deep-rose: #9d5c5c;
-            --burgundy: #6b3e3e;
-            --soft-shadow: rgba(157, 92, 92, 0.12);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIF NEURON INTERACTIVE SIMULATION</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 
-        body {
-            font-family: 'Crimson Text', serif;
-            background: var(--cream);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
-            overflow-x: hidden;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-        .header {
-            text-align: center;
-            margin-bottom: 80px;
-            opacity: 0;
-            animation: fadeInDown 1.2s ease forwards;
-        }
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #050505;
+      --border: #1f2933;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+      --accent: #e5e7eb;
+    }
 
-        @keyframes fadeInDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-        }
+    * { box-sizing: border-box; }
 
-        .main-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 300;
-            color: var(--deep-rose);
-            letter-spacing: 2px;
-            margin-bottom: 0;
-            line-height: 1.2;
-        }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+    }
 
-        /* Realistic Rose SVG */
-        .rose-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto 100px;
-            opacity: 0;
-            animation: fadeIn 2s ease forwards 0.5s;
-        }
+    header {
+      padding: 6rem 1.5rem 4rem;
+      text-align: center;
+    }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
+    header h1 {
+      font-family: 'League Spartan', sans-serif;
+      letter-spacing: 0.14em;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      margin: 0 0 1rem 0;
+      text-transform: uppercase;
+    }
 
-        .rose-svg {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 8px 24px var(--soft-shadow));
-        }
+    header p {
+      max-width: 640px;
+      margin: 0.8rem auto;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
 
-        /* Petal animation classes */
-        .petal-outer {
-            animation: petalUnfurl 2.5s ease-out forwards;
-            transform-origin: center;
-            opacity: 0;
-        }
+    header a {
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.15rem;
+    }
 
-        .petal-mid {
-            animation: petalUnfurl 2.5s ease-out forwards;
-            transform-origin: center;
-            opacity: 0;
-        }
+    section {
+      max-width: 1100px;
+      margin: auto;
+      padding: 4rem 1.5rem;
+    }
 
-        .petal-inner {
-            animation: petalUnfurl 2.5s ease-out forwards;
-            transform-origin: center;
-            opacity: 0;
-        }
+    .text-block {
+      max-width: 720px;
+      margin: auto;
+      font-size: 1.15rem;
+      color: #d1d5db;
+      text-align: justify;
+    }
 
-        .petal-center {
-            animation: petalUnfurl 1.8s ease-out forwards;
-            transform-origin: center;
-            opacity: 0;
-        }
+    .sim-container {
+      margin-top: 5rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 3rem;
+    }
 
-        @keyframes petalUnfurl {
-            0% {
-                opacity: 0;
-                transform: scale(0.3) rotate(-20deg);
-            }
-            60% {
-                opacity: 1;
-                transform: scale(1.05) rotate(0deg);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotate(0deg);
-            }
-        }
+    h2 {
+      font-family: 'League Spartan', sans-serif;
+      letter-spacing: 0.12em;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      color: var(--text-primary);
+    }
 
-        /* Staggered delays for each petal layer */
-        .petal-outer:nth-child(1) { animation-delay: 0.1s; }
-        .petal-outer:nth-child(2) { animation-delay: 0.2s; }
-        .petal-outer:nth-child(3) { animation-delay: 0.3s; }
-        .petal-outer:nth-child(4) { animation-delay: 0.4s; }
-        .petal-outer:nth-child(5) { animation-delay: 0.5s; }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
 
-        .petal-mid:nth-child(1) { animation-delay: 0.7s; }
-        .petal-mid:nth-child(2) { animation-delay: 0.8s; }
-        .petal-mid:nth-child(3) { animation-delay: 0.9s; }
-        .petal-mid:nth-child(4) { animation-delay: 1s; }
-        .petal-mid:nth-child(5) { animation-delay: 1.1s; }
+    .control-card {
+      padding: 1.6rem 1.4rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #060606, #000000);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
 
-        .petal-inner:nth-child(1) { animation-delay: 1.3s; }
-        .petal-inner:nth-child(2) { animation-delay: 1.4s; }
-        .petal-inner:nth-child(3) { animation-delay: 1.5s; }
-        .petal-inner:nth-child(4) { animation-delay: 1.6s; }
+    .control-card:hover {
+      transform: translateY(-4px);
+      border-color: #374151;
+    }
 
-        .petal-center { animation-delay: 1.8s; }
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
 
-        /* Quotes Section */
-        .quotes-container {
-            max-width: 1200px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 50px;
-            padding: 0 20px;
-            margin-top: 40px;
-        }
+    .control-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      background: #020617;
+      border: 1px solid var(--border);
+    }
 
-        .quote-card {
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            padding: 40px 30px;
-            border-top: 1px solid var(--dusty-pink);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    input[type="range"] {
+      width: 100%;
+      margin-top: 0.6rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
 
-        .quote-card:nth-child(1) { animation-delay: 2.2s; }
-        .quote-card:nth-child(2) { animation-delay: 2.4s; }
-        .quote-card:nth-child(3) { animation-delay: 2.6s; }
-        .quote-card:nth-child(4) { animation-delay: 2.8s; }
-        .quote-card:nth-child(5) { animation-delay: 3s; }
-        .quote-card:nth-child(6) { animation-delay: 3.2s; }
+    footer {
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .socials {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.4rem;
+    }
 
-        .quote-card:hover {
-            transform: translateY(-5px);
-            border-top-color: var(--rose);
-        }
+    .socials a {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+      background: #020617;
+    }
 
-        .quote-text {
-            font-size: 1.15rem;
-            line-height: 1.9;
-            color: var(--burgundy);
-            font-style: italic;
-            margin-bottom: 20px;
-            letter-spacing: 0.3px;
-        }
+    .socials a:hover {
+      transform: translateY(-4px) scale(1.05);
+      border-color: #6b7280;
+      background: #050505;
+    }
 
-        .quote-author {
-            font-size: 0.95rem;
-            color: var(--deep-rose);
-            text-align: right;
-            font-style: normal;
-            letter-spacing: 1px;
-        }
+    .socials svg {
+      width: 18px;
+      height: 18px;
+      fill: #e5e7eb;
+      transition: transform 0.3s ease;
+    }
 
-        @media (max-width: 768px) {
-            .header {
-                margin-bottom: 60px;
-            }
-
-            .rose-container {
-                margin-bottom: 80px;
-            }
-
-            .quotes-container {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .quote-card {
-                padding: 30px 20px;
-            }
-        }
-    </style>
+    .socials a:hover svg {
+      transform: rotate(-6deg);
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1 class="main-title">Happy Rose Day, Andy Bhai</h1>
+
+<header>
+  <h1>LEAKY INTEGRATE AND FIRE NEURON</h1>
+  <p>
+    An interactive visualization of a stochastic leaky integrate and fire neuron model.
+    Built to explore membrane dynamics, leakage, noise, and threshold based spiking.
+  </p>
+  <p>
+    <a href="https://indagada.medium.com/leaky-integrate-and-fire-model-43f44a19ed41" target="_blank" rel="noopener noreferrer">
+      Read more on my Medium Blog space (@indagada)
+    </a>
+  </p>
+</header>
+
+<section>
+  <div class="text-block">
+    <p>
+      Neurons continuously integrate incoming signals while simultaneously losing charge through
+      leaky ion channels. This leak is fundamental. It introduces decay, limits memory, and enforces
+      timing constraints on neural computation.
+    </p>
+    <p>
+      Only sufficiently strong and sustained input can overcome this decay and push the membrane
+      potential toward a firing threshold. When that threshold is crossed, the neuron emits a spike
+      and resets, briefly becoming unresponsive before integration resumes.
+    </p>
+    <p>
+      In computational terms, leakage stabilizes dynamics. It filters noise, prevents runaway
+      excitation, and keeps neurons responsive rather than brittle. What looks like loss is
+      actually control.
+    </p>
+  </div>
+
+  <div class="sim-container">
+    <h2>Interactive Simulation</h2>
+
+    <div class="controls">
+      <div class="control-card">
+        <div class="control-header">
+          <span>Input current I (nA)</span>
+          <span class="control-value" id="iVal"></span>
+        </div>
+        <input type="range" min="0" max="6" step="0.1" value="3.4" id="inputCurrent" />
+      </div>
+
+      <div class="control-card">
+        <div class="control-header">
+          <span>Noise sigma (mV)</span>
+          <span class="control-value" id="sigmaVal"></span>
+        </div>
+        <input type="range" min="0" max="2" step="0.1" value="0.5" id="sigma" />
+      </div>
     </div>
 
-    <div class="rose-container">
-        <svg class="rose-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <!-- Gradients for realistic rose petals -->
-                <radialGradient id="petalGrad1" cx="30%" cy="30%">
-                    <stop offset="0%" style="stop-color:#e8b4b4;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#d4a5a5;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#c17b7b;stop-opacity:1" />
-                </radialGradient>
-                <radialGradient id="petalGrad2" cx="35%" cy="25%">
-                    <stop offset="0%" style="stop-color:#f0c4c4;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#d8a0a0;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#b87070;stop-opacity:1" />
-                </radialGradient>
-                <radialGradient id="petalGrad3" cx="40%" cy="30%">
-                    <stop offset="0%" style="stop-color:#dca5a5;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#c17b7b;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#9d5c5c;stop-opacity:1" />
-                </radialGradient>
-                <radialGradient id="centerGrad" cx="40%" cy="40%">
-                    <stop offset="0%" style="stop-color:#f5d0d0;stop-opacity:1" />
-                    <stop offset="60%" style="stop-color:#d4a5a5;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#9d5c5c;stop-opacity:1" />
-                </radialGradient>
-                
-                <!-- Shadow filters -->
-                <filter id="softShadow">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                    <feOffset dx="0" dy="2" result="offsetblur"/>
-                    <feComponentTransfer>
-                        <feFuncA type="linear" slope="0.15"/>
-                    </feComponentTransfer>
-                    <feMerge>
-                        <feMergeNode/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            
-            <!-- Outer petals layer -->
-            <g class="outer-petals" filter="url(#softShadow)">
-                <!-- Outer petal 1 -->
-                <path class="petal-outer" d="M 200 80 Q 160 70, 140 100 Q 130 130, 155 155 Q 175 165, 200 150 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 2 -->
-                <path class="petal-outer" d="M 200 80 Q 240 70, 260 100 Q 270 130, 245 155 Q 225 165, 200 150 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 3 -->
-                <path class="petal-outer" d="M 320 200 Q 330 160, 300 140 Q 270 130, 245 155 Q 235 175, 250 200 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 4 -->
-                <path class="petal-outer" d="M 320 200 Q 330 240, 300 260 Q 270 270, 245 245 Q 235 225, 250 200 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 5 -->
-                <path class="petal-outer" d="M 200 320 Q 240 330, 260 300 Q 270 270, 245 245 Q 225 235, 200 250 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 6 -->
-                <path class="petal-outer" d="M 200 320 Q 160 330, 140 300 Q 130 270, 155 245 Q 175 235, 200 250 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 7 -->
-                <path class="petal-outer" d="M 80 200 Q 70 240, 100 260 Q 130 270, 155 245 Q 165 225, 150 200 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-                
-                <!-- Outer petal 8 -->
-                <path class="petal-outer" d="M 80 200 Q 70 160, 100 140 Q 130 130, 155 155 Q 165 175, 150 200 Z" 
-                      fill="url(#petalGrad1)" opacity="0.95"/>
-            </g>
-            
-            <!-- Middle petals layer -->
-            <g class="mid-petals">
-                <!-- Mid petal 1 -->
-                <path class="petal-mid" d="M 200 120 Q 170 115, 160 140 Q 155 165, 175 180 Q 185 185, 200 175 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 2 -->
-                <path class="petal-mid" d="M 200 120 Q 230 115, 240 140 Q 245 165, 225 180 Q 215 185, 200 175 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 3 -->
-                <path class="petal-mid" d="M 280 200 Q 285 170, 260 160 Q 235 155, 220 175 Q 215 185, 225 200 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 4 -->
-                <path class="petal-mid" d="M 280 200 Q 285 230, 260 240 Q 235 245, 220 225 Q 215 215, 225 200 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 5 -->
-                <path class="petal-mid" d="M 200 280 Q 230 285, 240 260 Q 245 235, 225 220 Q 215 215, 200 225 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 6 -->
-                <path class="petal-mid" d="M 200 280 Q 170 285, 160 260 Q 155 235, 175 220 Q 185 215, 200 225 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 7 -->
-                <path class="petal-mid" d="M 120 200 Q 115 230, 140 240 Q 165 245, 180 225 Q 185 215, 175 200 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-                
-                <!-- Mid petal 8 -->
-                <path class="petal-mid" d="M 120 200 Q 115 170, 140 160 Q 165 155, 180 175 Q 185 185, 175 200 Z" 
-                      fill="url(#petalGrad2)" opacity="0.9"/>
-            </g>
-            
-            <!-- Inner petals layer -->
-            <g class="inner-petals">
-                <!-- Inner petal 1 -->
-                <path class="petal-inner" d="M 200 150 Q 180 148, 175 165 Q 173 180, 185 190 Q 192 193, 200 188 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 2 -->
-                <path class="petal-inner" d="M 200 150 Q 220 148, 225 165 Q 227 180, 215 190 Q 208 193, 200 188 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 3 -->
-                <path class="petal-inner" d="M 250 200 Q 252 180, 235 175 Q 220 173, 210 185 Q 207 192, 212 200 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 4 -->
-                <path class="petal-inner" d="M 250 200 Q 252 220, 235 225 Q 220 227, 210 215 Q 207 208, 212 200 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 5 -->
-                <path class="petal-inner" d="M 200 250 Q 220 252, 225 235 Q 227 220, 215 210 Q 208 207, 200 212 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 6 -->
-                <path class="petal-inner" d="M 200 250 Q 180 252, 175 235 Q 173 220, 185 210 Q 192 207, 200 212 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 7 -->
-                <path class="petal-inner" d="M 150 200 Q 148 220, 165 225 Q 180 227, 190 215 Q 193 208, 188 200 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-                
-                <!-- Inner petal 8 -->
-                <path class="petal-inner" d="M 150 200 Q 148 180, 165 175 Q 180 173, 190 185 Q 193 192, 188 200 Z" 
-                      fill="url(#petalGrad3)" opacity="0.85"/>
-            </g>
-            
-            <!-- Rose center -->
-            <g class="center">
-                <ellipse class="petal-center" cx="200" cy="200" rx="35" ry="35" 
-                         fill="url(#centerGrad)" opacity="0.95"/>
-                <ellipse class="petal-center" cx="195" cy="195" rx="20" ry="20" 
-                         fill="url(#centerGrad)" opacity="0.7"/>
-            </g>
-        </svg>
-    </div>
+    <div id="plot"></div>
+  </div>
+</section>
 
-    <div class="quotes-container">
-        <div class="quote-card">
-            <p class="quote-text">A soulmate is not found. They are recognized in the constellation of kindred spirits.</p>
-            <p class="quote-author">UNKNOWN</p>
-        </div>
+<footer>
+  Jyanu | LIF Neuron Simulation
 
-        <div class="quote-card">
-            <p class="quote-text">We are the moon and stars to each other—distant, yet forever connected by the universe.</p>
-            <p class="quote-author">UNKNOWN</p>
-        </div>
+  <div class="socials">
+    <a href="https://www.linkedin.com/in/s-jyanu-r-87313a2b3/" target="_blank" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.11 1 2.48 1s2.5 1.12 2.5 2.5zM0 8h5v16H0zM7.5 8h4.8v2.2h.1c.67-1.2 2.3-2.4 4.7-2.4 5 0 5.9 3.2 5.9 7.4V24h-5V16.1c0-1.9 0-4.4-2.7-4.4-2.7 0-3.1 2.1-3.1 4.3V24h-5z"/></svg>
+    </a>
 
-        <div class="quote-card">
-            <p class="quote-text">Friendship is the golden thread that ties the heart of all the worlds together.</p>
-            <p class="quote-author">JOHN EVELYN</p>
-        </div>
+    <a href="https://github.com/JyanuISB" target="_blank" aria-label="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 .5C5.7.5.5 5.8.5 12.3c0 5.2 3.4 9.6 8.2 11.2.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.8 1.6 2.8 2.3.3-.8.6-1.4 1-1.7-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.2 1.9-.4 2.9-.4s2 .1 2.9.4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.5 6 .4.4 1.1 1.1 1.1 2.3v3.4c0 .3.2.7.8.6 4.8-1.6 8.2-6 8.2-11.2C23.5 5.8 18.3.5 12 .5z"/></svg>
+    </a>
 
-        <div class="quote-card">
-            <p class="quote-text">Some souls just understand each other upon meeting, like stars recognizing their place in the cosmos.</p>
-            <p class="quote-author">N.R. HART</p>
-        </div>
+    <a href="https://x.com/indagadais" target="_blank" aria-label="X">
+      <svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.3 7.2L22 22h-6.9l-5.4-7-6.1 7H1l6.7-7.7L2 2h7l4.9 6.3L18.2 2z"/></svg>
+    </a>
+  </div>
+</footer>
 
-        <div class="quote-card">
-            <p class="quote-text">A true friend is the one who walks in when others walk out, a constant star in life's night sky.</p>
-            <p class="quote-author">WALTER WINCHELL</p>
-        </div>
+<script>
+  const V_rest = -70e-3;
+  const V_reset = -80e-3;
+  const V_th = -55e-3;
+  const R = 10e6;
+  const tau_m = 20e-3;
+  const ref_t = 2e-3;
+  const dt = 1e-5;
+  const t_max = 0.2;
 
-        <div class="quote-card">
-            <p class="quote-text">In the garden of friendship grow the rarest roses—those that bloom without the need for romance.</p>
-            <p class="quote-author">UNKNOWN</p>
-        </div>
-    </div>
+  function simulate() {
+    const I = parseFloat(inputCurrent.value) * 1e-9;
+    const sigma = parseFloat(sigmaInput.value) * 1e-3;
+
+    let V = V_rest;
+    let last_spike_t = -Infinity;
+
+    const time = [];
+    const voltage = [];
+    const spikes_t = [];
+    const spikes_v = [];
+
+    for (let t = 0; t < t_max; t += dt) {
+      if (t - last_spike_t < ref_t) {
+        V = V_reset;
+      } else {
+        const dv = (dt / tau_m) * (-(V - V_rest) + R * I);
+        const noise = sigma * randn();
+        V += dv + noise;
+        if (V >= V_th) {
+          spikes_t.push(t * 1000);
+          spikes_v.push(V_th * 1000);
+          V = V_reset;
+          last_spike_t = t;
+        }
+      }
+      time.push(t * 1000);
+      voltage.push(V * 1000);
+    }
+
+    Plotly.newPlot('plot', [
+      { x: time, y: voltage, mode: 'lines', name: 'V(t)' },
+      { x: spikes_t, y: spikes_v, mode: 'markers', name: 'Spikes', marker: { size: 5 } },
+      { x: time, y: Array(time.length).fill(V_th * 1000), mode: 'lines', name: 'Threshold', line: { dash: 'dash' } }
+    ], {
+      paper_bgcolor: '#000000',
+      plot_bgcolor: '#000000',
+      font: { color: '#ffffff', family: 'Inter, sans-serif' },
+      xaxis: { title: 'Time (ms)', gridcolor: '#111827' },
+      yaxis: { title: 'Membrane potential (mV)', gridcolor: '#111827' }
+    });
+  }
+
+  function randn() {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  const inputCurrent = document.getElementById('inputCurrent');
+  const sigmaInput = document.getElementById('sigma');
+  const iVal = document.getElementById('iVal');
+  const sigmaVal = document.getElementById('sigmaVal');
+
+  function updateLabels() {
+    iVal.textContent = inputCurrent.value;
+    sigmaVal.textContent = sigmaInput.value;
+  }
+
+  [inputCurrent, sigmaInput].forEach(el => {
+    el.addEventListener('input', () => {
+      updateLabels();
+      simulate();
+    });
+  });
+
+  updateLabels();
+  simulate();
+</script>
+
 </body>
 </html>
